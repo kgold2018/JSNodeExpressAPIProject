@@ -1,38 +1,34 @@
 import { v4 as uuid } from "uuid";
 import log from '../logger/logger.js';
-//getUsers();
-let users = [];
+
+let users = []; //our real DB
+
 export const getUsers = (req, res) => {
-    console.info("GET request to endpoint '/users' received.");
+    log.info("GET request to endpoint '/api/users/' received.");
+
     res.send(users.length ? users : "There are no users.");
-}
+};
 
- export const postUsers= (req, res) => {
-     console.info("POST request to endpoint '/users' received.");
+export const postUsers = (req, res) => {
+    log.info("POST request to endpoint '/api/users/' received.");
 
-     //create user postUsers()
-     const user = req.body;
-     const userId = uuid();
+    //create user
+    const user = req.body;
+    users.push({...user, id: uuid()});
 
-     users.push({...user, id: userId});
-     res.send([{UserID: userId }]);
+    res.send("User created successfully.");
+};
 
-     //res.send("User was created successfully.");
- };
-//export const deleteUsers
-export const deleteUsers = (req,res) => {
+export const deleteUsers = (req, res) => {
+    log.info("DELETE request to endpoint '/api/users' received.");
+
     users = [];
 
-    res.send("DB cleaned successfully.")
+    res.send("DB cleaned successfully.");
 }
 
-
-
-
-
-
 export const getUserById = (req, res) => {
-    console.info("GET request to endpoint '/users/id' received.");
+    log.info("GET request to endpoint '/users/id' received.");
 
     const userID = req.params.id;
     const foundUser = users.find((user) => user.id === userID);
@@ -40,34 +36,8 @@ export const getUserById = (req, res) => {
     res.send(foundUser ? foundUser : "User not found.");
 };
 
-// patchUserById();
-export const patchUserById = (req, res) => {
-    console.info("PATCH request to endpoint '/users/id' received.");
-
-    const userID = req.params.id;
-    const newFirstName = req.body.firstName;
-    const newLastName = req.body.lastName;
-    const newAge = req.body.age;
-
-    const foundUser = users.find((user) => user.id === userID);
-
-    if (newFirstName) {
-        foundUser.firstName = newFirstName;
-    }
-    if (newLastName) {
-        foundUser.lastName = newLastName;
-    }
-    if (newAge) {
-        foundUser.age = newAge;
-    }
-
-    res.send("User was updated successfully.");
-};
-
-
-// deleteUserById();
 export const deleteUserById = (req, res) => {
-    console.info("DElETE request to endpoint '/users/id' received.");
+    log.info("DElETE request to endpoint '/users/id' received.");
 
     const userID = req.params.id;
 
@@ -76,3 +46,25 @@ export const deleteUserById = (req, res) => {
     res.send("User was deleted successfully.");
 };
 
+export const patchUserById = (req, res) => {
+    log.info("PATCH request to endpoint '/users/id' received.");
+
+    const userID = req.params.id;
+    const newFirstName = req.body.firstName;
+    const newLastName = req.body.lastName;
+    const newAge = req.body.age;
+
+    const foundUser = users.find((user) => user.id === userID);
+
+    if(newFirstName) {
+        foundUser.firstName = newFirstName;
+    }
+    if(newLastName) {
+        foundUser.lastName = newLastName;
+    }
+    if(newAge) {
+        foundUser.age = newAge;
+    }
+
+    res.send("User was updated successfully.");
+};
