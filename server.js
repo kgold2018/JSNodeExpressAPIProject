@@ -40,4 +40,5 @@ app.get('/api/', (req, res) => {
     res.send("Node Express API Server App");
 })
 
-app.listen(PORT, () => log.server(`Server is running on http://localhost:${PORT}`))
+//app.listen(PORT, () => log.server(`Server is running on http://localhost:${PORT}`))
+app.listen(PORT, () => log.server(`Server is running on https://jsnodeexpressapiproject.onrender.com/`))
